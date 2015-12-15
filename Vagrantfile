@@ -44,18 +44,26 @@ $master_bootstrap = <<SCRIPT
   
 SCRIPT
 
+$slave_bootstrap = <<SCRIPT
+
+  # 
+
+SCRIPT
+
 Vagrant.configure(2) do |config|
   
   config.vm.provision "common", type: "shell", inline: $bootstrap
 
   config.vm.define "hadoop-master" do |master|
     master.vm.box = "centos/7"
+    master.vm.network "private_network", ip: "192.168.10.100"
     master.vm.provision "shell", preserve_order: true, inline: $master_bootstrap
   end
   
   (1..4).each do |i|
     config.vm.define "hadoop-slave-#{i}" do |node|
       node.vm.box = "centos/7"
+      node.vm.network "private_network", ip: "192.168.10.10#{i}"
     end
   end
 
