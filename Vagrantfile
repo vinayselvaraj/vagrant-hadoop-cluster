@@ -7,6 +7,14 @@ $bootstrap = <<SCRIPT
   wget -O /etc/yum.repos.d/bigtop.repo http://www.apache.org/dist/bigtop/bigtop-1.0.0/repos/centos7/bigtop.repo
   
   yum -y install hadoop\* java-1.7.0-openjdk-devel
+  
+  echo "192.168.10.100  hadoop-master" >> /etc/hosts
+  echo "192.168.10.101  hadoop-slave1" >> /etc/hosts
+  echo "192.168.10.102  hadoop-slave2" >> /etc/hosts
+  echo "192.168.10.103  hadoop-slave3" >> /etc/hosts
+  echo "192.168.10.104  hadoop-slave4" >> /etc/hosts
+  
+  
 SCRIPT
 
 $master_bootstrap = <<SCRIPT
