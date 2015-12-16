@@ -8,16 +8,18 @@ $bootstrap = <<SCRIPT
   
   yum -y install hadoop\* java-1.7.0-openjdk-devel
   
-  echo "192.168.10.100  hadoop-master" >> /etc/hosts
-  echo "192.168.10.101  hadoop-slave1" >> /etc/hosts
-  echo "192.168.10.102  hadoop-slave2" >> /etc/hosts
-  echo "192.168.10.103  hadoop-slave3" >> /etc/hosts
-  echo "192.168.10.104  hadoop-slave4" >> /etc/hosts
-  
-  
+  echo "192.168.77.100  hadoop-master" >> /etc/hosts
+  echo "192.168.77.101  hadoop-slave1" >> /etc/hosts
+  echo "192.168.77.102  hadoop-slave2" >> /etc/hosts
+  echo "192.168.77.103  hadoop-slave3" >> /etc/hosts
+  echo "192.168.77.104  hadoop-slave4" >> /etc/hosts
+    
 SCRIPT
 
+
 $master_bootstrap = <<SCRIPT
+
+  cp -f /home/vagrant/sync/config/master/* /etc/hadoop/conf/
 
   # Init HDFS 
   sudo -u hdfs hdfs namenode -format -force
@@ -53,8 +55,13 @@ $master_bootstrap = <<SCRIPT
 SCRIPT
 
 $slave_bootstrap = <<SCRIPT
-  sed -i 's/localhost:8020/192.168.10.100:8020/g' /etc/hadoop/conf/core-site.xml 
+  sed -i 's/localhost:8020/192.168.77.100:8020/g' /etc/hadoop/conf/core-site.xml
+  
+  service hadoop-hdfs-datanode start
+  
 SCRIPT
+
+
 
 Vagrant.configure(2) do |config|
   
@@ -63,7 +70,7 @@ Vagrant.configure(2) do |config|
   config.vm.define "hadoop-master" do |master|
     master.vm.box      = "centos/7"
     master.vm.hostname = "hadoop-master"
-    master.vm.network    "private_network", ip: "192.168.10.100"
+    master.vm.network    "private_network", ip: "192.168.77.100"
     master.vm.provision  "shell", preserve_order: true, inline: $master_bootstrap
   end
   
@@ -71,7 +78,7 @@ Vagrant.configure(2) do |config|
     config.vm.define "hadoop-slave-#{i}" do |node|
       node.vm.box      = "centos/7"
       node.vm.hostname = "hadoop-slave-#{i}"
-      node.vm.network "private_network", ip: "192.168.10.10#{i}"
+      node.vm.network "private_network", ip: "192.168.77.10#{i}"
       node.vm.provision "shell", preserve_order: true, inline: $slave_bootstrap
     end
   end
