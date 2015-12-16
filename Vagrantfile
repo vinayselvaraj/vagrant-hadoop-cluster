@@ -8,6 +8,7 @@ $bootstrap = <<SCRIPT
   
   yum -y install hadoop\* java-1.7.0-openjdk-devel
   
+  echo "127.0.0.1 localhost"            > /etc/hosts
   echo "192.168.77.100  hadoop-master" >> /etc/hosts
   echo "192.168.77.101  hadoop-slave1" >> /etc/hosts
   echo "192.168.77.102  hadoop-slave2" >> /etc/hosts
@@ -19,7 +20,7 @@ SCRIPT
 
 $master_bootstrap = <<SCRIPT
 
-  cp -f /home/vagrant/sync/config/master/* /etc/hadoop/conf/
+  cp -f /vagrant/config/master/* /etc/hadoop/conf/
 
   # Init HDFS 
   sudo -u hdfs hdfs namenode -format -force
@@ -64,6 +65,9 @@ SCRIPT
 
 
 Vagrant.configure(2) do |config|
+
+  
+  config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   
   config.vm.provision "common", type: "shell", inline: $bootstrap
 
