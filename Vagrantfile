@@ -65,7 +65,10 @@ SCRIPT
 
 
 Vagrant.configure(2) do |config|
-
+  
+  config.vm.provider "virtualbox" do |v|
+    v.gui = true
+  end
   
   config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   
