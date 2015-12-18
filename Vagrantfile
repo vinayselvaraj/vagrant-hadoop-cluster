@@ -9,11 +9,6 @@ $bootstrap = <<SCRIPT
   yum -y install hadoop\* java-1.7.0-openjdk-devel
   
   echo "127.0.0.1 localhost"            > /etc/hosts
-  echo "192.168.77.100  hadoop-master" >> /etc/hosts
-  echo "192.168.77.101  hadoop-slave1" >> /etc/hosts
-  echo "192.168.77.102  hadoop-slave2" >> /etc/hosts
-  echo "192.168.77.103  hadoop-slave3" >> /etc/hosts
-  echo "192.168.77.104  hadoop-slave4" >> /etc/hosts
     
 SCRIPT
 
@@ -56,9 +51,17 @@ $master_bootstrap = <<SCRIPT
 SCRIPT
 
 $slave_bootstrap = <<SCRIPT
-  sed -i 's/localhost:8020/192.168.77.100:8020/g' /etc/hadoop/conf/core-site.xml
+
+  yum -y install hadoop-hdfs-datanode
+  yum -y install hadoop-yarn-nodemanager
+  yum -y install hadoop-mapreduce
+
+
+  sed -i 's/localhost:8020/hadoop-master.selvaraj.com:8020/g' /etc/hadoop/conf/core-site.xml
+  cp -f /vagrant/config/slave/* /etc/hadoop/conf/
   
   service hadoop-hdfs-datanode start
+  service hadoop-yarn-nodemanager start
   
 SCRIPT
 
@@ -76,7 +79,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "hadoop-master" do |master|
     master.vm.box      = "centos/7"
-    master.vm.hostname = "hadoop-master"
+    master.vm.hostname = "hadoop-master.selvaraj.com"
     master.vm.network    "private_network", ip: "192.168.77.100"
     master.vm.provision  "shell", preserve_order: true, inline: $master_bootstrap
   end
@@ -84,7 +87,7 @@ Vagrant.configure(2) do |config|
   (1..4).each do |i|
     config.vm.define "hadoop-slave-#{i}" do |node|
       node.vm.box      = "centos/7"
-      node.vm.hostname = "hadoop-slave-#{i}"
+      node.vm.hostname = "hadoop-slave-#{i}.selvaraj.com"
       node.vm.network "private_network", ip: "192.168.77.10#{i}"
       node.vm.provision "shell", preserve_order: true, inline: $slave_bootstrap
     end
