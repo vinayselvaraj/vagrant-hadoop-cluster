@@ -9,7 +9,12 @@ $bootstrap = <<SCRIPT
   yum -y install hadoop\* java-1.7.0-openjdk-devel
   
   echo "127.0.0.1 localhost"            > /etc/hosts
-    
+  echo "192.168.77.100 hadoop-master"   >> /etc/hosts
+  echo "192.168.77.101 hadoop-slave-1"  >> /etc/hosts
+  echo "192.168.77.102 hadoop-slave-2"  >> /etc/hosts
+  echo "192.168.77.103 hadoop-slave-3"  >> /etc/hosts
+  echo "192.168.77.104 hadoop-slave-4"  >> /etc/hosts
+
 SCRIPT
 
 
