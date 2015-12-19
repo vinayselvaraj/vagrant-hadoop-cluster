@@ -20,6 +20,7 @@ SCRIPT
 
 $master_bootstrap = <<SCRIPT
 
+  cp -f /vagrant/config/common/* /etc/hadoop/conf/
   cp -f /vagrant/config/master/* /etc/hadoop/conf/
 
   # Init HDFS 
@@ -61,8 +62,7 @@ $slave_bootstrap = <<SCRIPT
   yum -y install hadoop-yarn-nodemanager
   yum -y install hadoop-mapreduce
 
-
-  sed -i 's/localhost:8020/hadoop-master.selvaraj.com:8020/g' /etc/hadoop/conf/core-site.xml
+  cp -f /vagrant/config/common/* /etc/hadoop/conf/
   cp -f /vagrant/config/slave/* /etc/hadoop/conf/
   
   service hadoop-hdfs-datanode start

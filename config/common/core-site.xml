@@ -19,33 +19,28 @@
 
 <configuration>
   <property>
-    <name>mapred.job.tracker</name>
-    <value>localhost:8021</value>
+    <name>fs.defaultFS</name>
+    <value>hdfs://hadoop-master.selvaraj.com:8020</value>
   </property>
 
+  <!-- OOZIE proxy user setting -->
   <property>
-    <name>mapreduce.framework.name</name>
-    <value>yarn</value>
+    <name>hadoop.proxyuser.oozie.hosts</name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.oozie.groups</name>
+    <value>*</value>
   </property>
 
+  <!-- HTTPFS proxy user setting -->
   <property>
-    <name>mapreduce.jobhistory.address</name>
-    <value>localhost:10020</value>
+    <name>hadoop.proxyuser.httpfs.hosts</name>
+    <value>*</value>
   </property>
   <property>
-    <name>mapreduce.jobhistory.webapp.address</name>
-    <value>localhost:19888</value>
-  </property>
-
-  <property>
-    <description>To set the value of tmp directory for map and reduce tasks.</description>
-    <name>mapreduce.task.tmp.dir</name>
-    <value>/var/lib/hadoop-mapreduce/cache/${user.name}/tasks</value>
-  </property>
-  
-  <property>
-    <name>mapreduce.jobhistory.bind-host</name>
-    <value>0.0.0.0</value>
+    <name>hadoop.proxyuser.httpfs.groups</name>
+    <value>*</value>
   </property>
 
 </configuration>
