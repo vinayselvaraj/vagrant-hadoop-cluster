@@ -90,7 +90,7 @@ Vagrant.configure(2) do |config|
     master.vm.provision  "shell", preserve_order: true, inline: $master_bootstrap
   end
   
-  (1..4).each do |i|
+  (1..2).each do |i|
     config.vm.define "hadoop-slave-#{i}" do |node|
       node.vm.box      = "centos/7"
       node.vm.hostname = "hadoop-slave-#{i}.selvaraj.com"
